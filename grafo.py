@@ -11,8 +11,17 @@ class Grafo:
     else:
       self.mat_adj = mat_adj
 
-  def add_aresta(self, s, t):
-    self.lista_adj[s].append(t)
-    self.lista_adj[t].append(s)
-    self.mat_adj[s][t] = 1
-    self.mat_adj[t][s] = 1
+  def add_aresta(self, u, v):
+    self.lista_adj[u].append(v)
+    self.lista_adj[v].append(u)
+    self.mat_adj[u][v] = 1
+    self.mat_adj[v][u] = 1
+
+  def grau(self, v):
+    return len(self.lista_adj[v])
+
+  def adjacente(self, u, v):
+    if self.mat_adj[u][v] != 0:
+      return True
+    else:
+      return False
