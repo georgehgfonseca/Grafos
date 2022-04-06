@@ -1,8 +1,5 @@
 import grafo
 
-g1 = grafo.Grafo(4)
-print(g1.mat_adj)
-g1.add_aresta(0, 2)
-g1.add_aresta(1, 3)
-g1.add_aresta(2, 3)
+g1 = grafo.Grafo(orientado = True, ponderado = False)
+g1.ler_arquivo("grafo1.txt")
 print(g1.mat_adj)
