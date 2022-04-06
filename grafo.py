@@ -1,10 +1,8 @@
 class Grafo:
 
-  def __init__(self, num_vert = 0, num_arestas = 0, lista_adj = None, mat_adj = None, orientado = False, ponderado = False):
+  def __init__(self, num_vert = 0, num_arestas = 0, lista_adj = None, mat_adj = None):
     self.num_vert = num_vert
     self.num_arestas = num_arestas
-    self.orientado = orientado
-    self.ponderado = ponderado
     if lista_adj is None:
       self.lista_adj = [[] for i in range(num_vert)]
     else:
@@ -16,24 +14,10 @@ class Grafo:
 
   def add_aresta(self, u, v, w = 1):
     """Adiciona aresta de u a v com peso w"""
+    self.num_arestas += 1
     if u < self.num_vert and v < self.num_vert:
-      self.num_arestas += 1
-      if not self.orientado and not self.ponderado:
-        self.lista_adj[u].append(v)
-        self.lista_adj[v].append(u)
-        self.mat_adj[u][v] = 1
-        self.mat_adj[v][u] = 1
-      elif not self.orientado and self.ponderado:
-        self.lista_adj[u].append((v, w))
-        self.lista_adj[v].append((u, w))
-        self.mat_adj[u][v] = w
-        self.mat_adj[v][u] = w
-      elif self.orientado and not self.ponderado:
-        self.lista_adj[u].append(v)
-        self.mat_adj[u][v] = 1
-      elif self.orientado and self.ponderado:
-        self.lista_adj[u].append((v, w))
-        self.mat_adj[u][v] = w
+      self.lista_adj[u].append((v, w))
+      self.mat_adj[u][v] = w
     else:
       print("Aresta invalida!")
 
@@ -41,23 +25,12 @@ class Grafo:
     """Remove aresta de u a v, se houver"""
     if u < self.num_vert and v < self.num_vert:
       if self.mat_adj[u][v] != 0:
+        self.num_arestas += 1
         self.mat_adj[u][v] = 0
-        if not self.ponderado:
-          self.lista_adj[u].remove(v)
-        else:
-          for (v2, w2) in self.lista_adj[u]:
-            if v2 == v:
-              self.lista_adj[u].remove((v2, w2))
-              break
-        if not self.orientado:
-          self.mat_adj[v][u] = 0
-          if not self.ponderado:
-            self.lista_adj[v].remove(u)
-          else:
-            for (u2, w2) in self.lista_adj[v]:
-              if u2 == u:
-                self.lista_adj[v].remove((u2, w2))
-                break
+        for (v2, w2) in self.lista_adj[u]:
+          if v2 == v:
+            self.lista_adj[u].remove((v2, w2))
+            break
       else:
         print("Aresta inexistente!")
     else:
