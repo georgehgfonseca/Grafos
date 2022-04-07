@@ -47,9 +47,31 @@ class Grafo:
     else:
       return False
 
+  def adjacentes_peso(self, u):
+    """Retorna a lista dos vertices adjacentes a u no formato (v, w)"""
+    return self.lista_adj[u]
+
   def adjacentes(self, u):
     """Retorna a lista dos vertices adjacentes a u"""
-    return self.lista_adj[u]
+    adj = []
+    for i in range(self.lista_adj[u]):
+      (v, w) = self.lista_adj[u][i]
+      adj.append(v)
+    return adj
+
+  def densidade(self):
+    """Retorna a densidade do grafo"""
+    return self.num_arestas / (self.num_vert * (self.num_vert - 1))
+
+  def subgrafo(self, g2):
+    """Determina se g2 e subgrafo de self"""
+    if g2.num_vert > self.num_vert:
+      return False
+    for i in range(len(g2.mat_adj)):
+      for j in range(len(g2.mat_adj[i])):
+        if g2.mat_adj[i][j] != 0 and self.mat_adj[i][j] == 0:
+          return False
+    return True
 
   def ler_arquivo(self, nome_arq):
     """Le arquivo de grafo no formato dimacs"""
@@ -59,17 +81,17 @@ class Grafo:
       str = arq.readline()
       str = str.split(" ")
       self.num_vert = int(str[0])
-      self.num_arestas = int(str[1])
+      cont_arestas = int(str[1])
       #Inicializacao das estruturas de dados
       self.lista_adj = [[] for i in range(self.num_vert)]
       self.mat_adj = [[0 for j in range(self.num_vert)] for i in range(self.num_vert)] 
       #Le cada aresta do arquivo
-      for i in range(0,self.num_arestas):
+      for i in range(0,cont_arestas):
         str = arq.readline()
         str = str.split(" ")
-        u = int(str[0])
-        v = int(str[1])
-        w = int(str[2])
+        u = int(str[0]) #Vertice origem
+        v = int(str[1]) #Vertice destino
+        w = int(str[2]) #Peso da aresta
         self.add_aresta(u, v, w)
     except IOError:
       print("Nao foi possivel encontrar ou ler o arquivo!")
