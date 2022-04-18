@@ -95,3 +95,23 @@ class Grafo:
         self.add_aresta(u, v, w)
     except IOError:
       print("Nao foi possivel encontrar ou ler o arquivo!")
+
+  def busca_largura(self, s):
+    """Retorna a ordem de descoberta dos vertices pela 
+       busca em largura a partir de s"""
+    desc = [0 for v in range(self.num_vert)]
+    Q = [s]
+    R = [s]
+    desc[s] = 1
+    while Q:
+      u = Q.pop(0)
+      for (v, w) in self.lista_adj[u]:
+        if desc[v] == 0:
+          Q.append(v)
+          R.append(v)
+          desc[v] = 1
+    return R
+
+
+
+
