@@ -54,7 +54,7 @@ class Grafo:
   def adjacentes(self, u):
     """Retorna a lista dos vertices adjacentes a u"""
     adj = []
-    for i in range(self.lista_adj[u]):
+    for i in range(len(self.lista_adj[u])):
       (v, w) = self.lista_adj[u][i]
       adj.append(v)
     return adj
