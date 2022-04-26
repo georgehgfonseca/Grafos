@@ -11,6 +11,7 @@ class Grafo:
       self.mat_adj = [[0 for j in range(num_vert)] for i in range(num_vert)]
     else:
       self.mat_adj = mat_adj
+      
 
   def add_aresta(self, u, v, w = 1):
     """Adiciona aresta de u a v com peso w"""
@@ -25,7 +26,7 @@ class Grafo:
     """Remove aresta de u a v, se houver"""
     if u < self.num_vert and v < self.num_vert:
       if self.mat_adj[u][v] != 0:
-        self.num_arestas += 1
+        self.num_arestas -= 1
         self.mat_adj[u][v] = 0
         for (v2, w2) in self.lista_adj[u]:
           if v2 == v:
@@ -112,6 +113,75 @@ class Grafo:
           desc[v] = 1
     return R
 
+  def busca_profundidade(self, s):
+    """Retorna a ordem de descoberta dos vertices pela 
+       busca em profundidade a partir de s"""
+    desc = [0 for v in range(self.num_vert)]
+    S = [s]
+    R = [s]
+    desc[s] = 1
+    while S:
+      u = S[-1]
+      desempilhar = True
+      for (v, w) in self.lista_adj[u]:
+        if desc[v] == 0:
+          desempilhar = False
+          S.append(v)
+          R.append(v)
+          desc[v] = 1
+          break
+      if desempilhar:
+        S.pop(-1)
+    return R
 
 
+  
+  def busca_profundidade_rec(self, s, R, desc):
+    """Retorna a ordem de descoberta dos vertices pela 
+       busca em profundidade a partir de s"""
+    R.append(s)
+    desc[s] = 1
+    for (v, w) in self.lista_adj[s]:
+      if desc[v] == 0:
+        self.busca_profundidade_rec(v, R, desc)
+    return R
+    
+  def conexo(self, s):
+    """Retorna Ture se o grafo e conexo e False caso contrario
+       baseado na busca em largura"""
+    desc = [0 for v in range(self.num_vert)]
+    Q = [s]
+    R = [s]
+    desc[s] = 1
+    while Q:
+      u = Q.pop(0)
+      for (v, w) in self.lista_adj[u]:
+        if desc[v] == 0:
+          Q.append(v)
+          R.append(v)
+          desc[v] = 1
+    for i in range(len(desc)):
+      if desc[i] == 0:
+        return False
+    return True
 
+  def ciclo(self, s):
+    """Retorna Ture se o grafo tem ciclo e False caso contrario
+       baseado na busca em largura"""
+    desc = [0 for v in range(self.num_vert)]
+    for s in range(self.num_vert):
+      if desc[s] == 0:
+        Q = [s]
+        R = [s]
+        desc[s] = 1
+        while Q:
+          u = Q.pop(0)
+          for (v, w) in self.lista_adj[u]:
+            if desc[v] == 0:
+              Q.append(v)
+              R.append(v)
+              desc[v] = 1
+            else:
+              return True
+    return False
+    
